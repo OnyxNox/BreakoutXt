@@ -1,0 +1,20 @@
+use bevy::{
+    app::{App, Plugin, Startup},
+    core_pipeline::core_2d::Camera2d,
+    ecs::system::Commands,
+};
+
+/// Defines resources and systems around the main camera.
+pub struct CameraPlugin;
+impl Plugin for CameraPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Startup, Self::setup_camera);
+    }
+}
+
+impl CameraPlugin {
+    /// Spawns the main camera.
+    fn setup_camera(mut commands: Commands) {
+        commands.spawn(Camera2d);
+    }
+}
