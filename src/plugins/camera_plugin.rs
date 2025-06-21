@@ -1,10 +1,6 @@
-use bevy::{
-    app::{App, Plugin, Startup},
-    core_pipeline::core_2d::Camera2d,
-    ecs::system::Commands,
-};
+use bevy::prelude::*;
 
-/// Defines resources and systems around the main camera.
+/// Collection of resources and systems around the main camera.
 pub struct CameraPlugin;
 impl Plugin for CameraPlugin {
     fn build(&self, app: &mut App) {
