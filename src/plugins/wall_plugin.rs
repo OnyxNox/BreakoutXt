@@ -2,6 +2,9 @@ use bevy::prelude::*;
 
 use crate::components::Collider;
 
+/// Bottom wall y-axis position.
+pub const WALL_POSITION_BOTTOM: f32 = -300.0;
+
 /// Wall color.
 const WALL_COLOR: Color = Color::srgb(0.8, 0.8, 0.8);
 
@@ -13,9 +16,6 @@ const WALL_POSITION_RIGHT: f32 = 450.0;
 
 /// Top wall y-axis position.
 const WALL_POSITION_TOP: f32 = 300.0;
-
-/// Bottom wall y-axis position.
-const WALL_POSITION_BOTTOM: f32 = -300.0;
 
 /// Wall thickness.
 const WALL_THICKNESS: f32 = 10.0;
@@ -33,6 +33,7 @@ impl Plugin for WallPlugin {
 #[require(Collider, Sprite, Transform)]
 pub struct Wall;
 impl Wall {
+    /// Initialize a new wall.
     fn new(location: WallLocation) -> (Wall, Sprite, Transform) {
         (
             Wall,
