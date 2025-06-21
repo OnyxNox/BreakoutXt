@@ -1,24 +1,15 @@
 use bevy::prelude::*;
 
-use crate::components::Collider;
-
-/// Bottom wall y-axis position.
-pub const WALL_POSITION_BOTTOM: f32 = -300.0;
+use crate::{
+    components::Collider,
+    constants::{WALL_POSITION_BOTTOM, WALL_POSITION_LEFT, WALL_POSITION_RIGHT, WALL_THICKNESS},
+};
 
 /// Wall color.
 const WALL_COLOR: Color = Color::srgb(0.8, 0.8, 0.8);
 
-/// Left wall x-axis position.
-const WALL_POSITION_LEFT: f32 = -450.0;
-
-/// Right wall x-axis position.
-const WALL_POSITION_RIGHT: f32 = 450.0;
-
 /// Top wall y-axis position.
 const WALL_POSITION_TOP: f32 = 300.0;
-
-/// Wall thickness.
-const WALL_THICKNESS: f32 = 10.0;
 
 /// Collection of resources and systems around walls.
 pub struct WallPlugin;

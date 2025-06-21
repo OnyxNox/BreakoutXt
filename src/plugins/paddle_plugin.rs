@@ -2,14 +2,20 @@ use bevy::prelude::*;
 
 use crate::{
     components::{Collider, Paddle},
-    plugins::wall_plugin::WALL_POSITION_BOTTOM,
+    constants::{WALL_POSITION_BOTTOM, WALL_POSITION_LEFT, WALL_POSITION_RIGHT, WALL_THICKNESS},
 };
 
 /// Paddle color.
 const PADDLE_COLOR: Color = Color::srgb(0.3, 0.3, 0.7);
 
+/// Paddle padding from the left and right walls.
+const PADDLE_X_PADDING: f32 = 10.0;
+
 /// Paddle padding from the bottom wall.
-const PADDLE_PADDING: f32 = 60.0;
+const PADDLE_Y_PADDING: f32 = 60.0;
+
+/// Paddle's rate of speed.
+const PADDLE_SPEED: f32 = 500.0;
 
 /// Paddle size.
 const PADDLE_SIZE: Vec2 = Vec2::new(120.0, 20.0);
@@ -18,7 +24,8 @@ const PADDLE_SIZE: Vec2 = Vec2::new(120.0, 20.0);
 pub struct PaddlePlugin;
 impl Plugin for PaddlePlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, Self::setup_paddle);
+        app.add_systems(Startup, Self::setup_paddle)
+            .add_systems(FixedUpdate, Self::update_paddle);
     }
 }
 
@@ -30,10 +37,37 @@ impl PaddlePlugin {
             Paddle,
             Sprite::from_color(PADDLE_COLOR, Vec2::ONE),
             Transform {
-                translation: Vec3::new(0.0, WALL_POSITION_BOTTOM + PADDLE_PADDING, 0.0),
+                translation: Vec3::new(0.0, WALL_POSITION_BOTTOM + PADDLE_Y_PADDING, 0.0),
                 scale: PADDLE_SIZE.extend(1.0),
                 ..default()
             },
         ));
+    }
+
+    /// Updates the paddle's position.
+    fn update_paddle(
+        keyboard_input: Res<ButtonInput<KeyCode>>,
+        time: Res<Time>,
+        mut paddle_transform: Single<&mut Transform, With<Paddle>>,
+    ) {
+        let mut direction = 0.0;
+
+        if keyboard_input.pressed(KeyCode::ArrowLeft) {
+            direction -= 1.0;
+        }
+
+        if keyboard_input.pressed(KeyCode::ArrowRight) {
+            direction += 1.0;
+        }
+
+        let new_paddle_position =
+            paddle_transform.translation.x + direction * PADDLE_SPEED * time.delta_secs();
+
+        let left_bound =
+            WALL_POSITION_LEFT + WALL_THICKNESS / 2.0 + PADDLE_SIZE.x / 2.0 + PADDLE_X_PADDING;
+        let right_bound =
+            WALL_POSITION_RIGHT - WALL_THICKNESS / 2.0 - PADDLE_SIZE.x / 2.0 - PADDLE_X_PADDING;
+
+        paddle_transform.translation.x = new_paddle_position.clamp(left_bound, right_bound);
     }
 }
