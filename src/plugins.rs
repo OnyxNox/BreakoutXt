@@ -1,3 +1,4 @@
+mod audio_plugin;
 mod ball_plugin;
 mod brick_plugin;
 mod camera_plugin;
@@ -12,6 +13,7 @@ pub struct GamePlugins;
 impl PluginGroup for GamePlugins {
     fn build(self) -> PluginGroupBuilder {
         PluginGroupBuilder::start::<Self>()
+            .add(self::audio_plugin::AudioPlugin)
             .add(self::ball_plugin::BallPlugin)
             .add(self::brick_plugin::BrickPlugin)
             .add(self::camera_plugin::CameraPlugin)

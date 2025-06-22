@@ -7,3 +7,7 @@ Execute `cargo run` from the repository's root directory in a terminal. User rel
 ## Crates
 
 - [Bevy](https://github.com/bevyengine/bevy) is a data-driven game engine.
+
+## Asset Credits
+
+- [Kenny](https://kenney.nl/) - [Impact Sounds 1.0](https://kenney.nl/assets/impact-sounds)
