@@ -1,5 +1,12 @@
 # Breakout XT
 
+This repository serves as a learning platform for exploring game and graphics programming using Rust and the Bevy game engine. It is an extended version of the [Bevy Breakout example](https://github.com/bevyengine/bevy/blob/release-0.16.1/examples/games/breakout.rs).
+
+## Extensions
+
+- Divided the example up into more maintainable plugin modules.
+- Added a splash screen.
+
 ## Development
 
 Execute `cargo run` from the repository's root directory in a terminal. User release binaries will be available after a minimum viable product is produced.
