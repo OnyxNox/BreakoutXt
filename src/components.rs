@@ -1,5 +1,9 @@
 use bevy::prelude::*;
 
+/// Brick marker component.
+#[derive(Component)]
+pub struct Brick;
+
 /// Collider marker component.
 #[derive(Component, Default)]
 pub struct Collider;

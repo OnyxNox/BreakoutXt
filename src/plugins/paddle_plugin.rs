@@ -2,7 +2,10 @@ use bevy::prelude::*;
 
 use crate::{
     components::{Collider, Paddle},
-    constants::{WALL_POSITION_BOTTOM, WALL_POSITION_LEFT, WALL_POSITION_RIGHT, WALL_THICKNESS},
+    constants::{
+        PADDLE_Y_PADDING, WALL_POSITION_BOTTOM, WALL_POSITION_LEFT, WALL_POSITION_RIGHT,
+        WALL_THICKNESS,
+    },
 };
 
 /// Paddle color.
@@ -10,9 +13,6 @@ const PADDLE_COLOR: Color = Color::srgb(0.3, 0.3, 0.7);
 
 /// Paddle padding from the left and right walls.
 const PADDLE_X_PADDING: f32 = 10.0;
-
-/// Paddle padding from the bottom wall.
-const PADDLE_Y_PADDING: f32 = 60.0;
 
 /// Paddle's rate of speed.
 const PADDLE_SPEED: f32 = 500.0;
