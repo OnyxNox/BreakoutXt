@@ -1,5 +1,20 @@
 use bevy::prelude::*;
 
+/// Ball color.
+pub const BALL_COLOR: Color = Color::srgb(1.0, 0.5, 0.5);
+
+/// Ball size.
+pub const BALL_DIAMETER: f32 = 30.0;
+
+/// Ball initial velocity.
+pub const BALL_INITIAL_VELOCITY: Vec2 = Vec2::new(0.5, -0.5);
+
+/// Ball rate of speed.
+pub const BALL_SPEED: f32 = 400.0;
+
+/// Ball starting position.
+pub const BALL_STARTING_POSITION: Vec3 = Vec3::new(0.0, -50.0, 1.0);
+
 /// Brick color.
 pub const BRICK_COLOR: Color = Color::srgb(0.5, 0.5, 1.0);
 
