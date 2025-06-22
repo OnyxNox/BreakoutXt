@@ -5,6 +5,7 @@ mod camera_plugin;
 mod hud_plugin;
 mod paddle_plugin;
 mod physics_plugin;
+mod splash_plugin;
 mod wall_plugin;
 
 use bevy::{app::PluginGroupBuilder, prelude::*};
@@ -20,6 +21,7 @@ impl PluginGroup for GamePlugins {
             .add(self::hud_plugin::HudPlugin)
             .add(self::paddle_plugin::PaddlePlugin)
             .add(self::physics_plugin::PhysicsPlugin)
+            .add(self::splash_plugin::SplashPlugin)
             .add(self::wall_plugin::WallPlugin)
     }
 }

@@ -1,11 +1,11 @@
 use bevy::prelude::*;
 
-use crate::{components::*, constants::*};
+use crate::{components::*, constants::*, states::*};
 
 pub struct BrickPlugin;
 impl Plugin for BrickPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, Self::setup_bricks);
+        app.add_systems(OnEnter(GameState::Game), Self::setup_bricks);
     }
 }
 

@@ -1,12 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{
-    components::{Collider, Paddle},
-    constants::{
-        PADDLE_Y_PADDING, WALL_POSITION_BOTTOM, WALL_POSITION_LEFT, WALL_POSITION_RIGHT,
-        WALL_THICKNESS,
-    },
-};
+use crate::{components::*, constants::*, states::*};
 
 const PADDLE_COLOR: Color = Color::srgb(0.3, 0.3, 0.7);
 
@@ -19,8 +13,11 @@ const PADDLE_SIZE: Vec2 = Vec2::new(120.0, 20.0);
 pub struct PaddlePlugin;
 impl Plugin for PaddlePlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, Self::setup_paddle)
-            .add_systems(FixedUpdate, Self::update_paddle);
+        app.add_systems(OnEnter(GameState::Game), Self::setup_paddle)
+            .add_systems(
+                FixedUpdate,
+                Self::update_paddle.run_if(in_state(GameState::Game)),
+            );
     }
 }
 

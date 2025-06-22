@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::resources::*;
+use crate::{resources::*, states::*};
 
 const FONT_SIZE: f32 = 33.0;
 
@@ -14,8 +14,8 @@ pub struct HudPlugin;
 impl Plugin for HudPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(Score(0))
-            .add_systems(Startup, Self::setup_hud)
-            .add_systems(Update, Self::update_hud);
+            .add_systems(OnEnter(GameState::Game), Self::setup_hud)
+            .add_systems(Update, Self::update_hud.run_if(in_state(GameState::Game)));
     }
 }
 

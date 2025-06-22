@@ -1,12 +1,15 @@
 use bevy::prelude::*;
 
-use crate::{events::*, resources::*};
+use crate::{events::*, resources::*, states::*};
 
 pub struct AudioPlugin;
 impl Plugin for AudioPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(FixedUpdate, Self::play_collision_sound)
-            .add_systems(Startup, Self::setup_audio);
+        app.add_systems(
+            FixedUpdate,
+            Self::play_collision_sound.run_if(in_state(GameState::Game)),
+        )
+        .add_systems(OnEnter(GameState::Game), Self::setup_audio);
     }
 }
 

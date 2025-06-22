@@ -3,14 +3,16 @@ use bevy::{
     prelude::*,
 };
 
-use crate::{components::*, constants::*, enums::*, events::*, resources::*};
+use crate::{components::*, constants::*, enums::*, events::*, resources::*, states::*};
 
 pub struct PhysicsPlugin;
 impl Plugin for PhysicsPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<CollisionEvent>().add_systems(
             FixedUpdate,
-            (Self::apply_velocity, Self::check_for_collisions).chain(),
+            (Self::apply_velocity, Self::check_for_collisions)
+                .chain()
+                .run_if(in_state(GameState::Game)),
         );
     }
 }
