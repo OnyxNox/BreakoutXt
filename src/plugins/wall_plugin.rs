@@ -2,10 +2,8 @@ use bevy::prelude::*;
 
 use crate::{components::*, constants::*};
 
-/// Wall color.
 const WALL_COLOR: Color = Color::srgb(0.8, 0.8, 0.8);
 
-/// Collection of resources and systems around walls.
 pub struct WallPlugin;
 impl Plugin for WallPlugin {
     fn build(&self, app: &mut App) {
@@ -13,12 +11,10 @@ impl Plugin for WallPlugin {
     }
 }
 
-/// Wall marker component.
 #[derive(Component)]
 #[require(Collider, Sprite, Transform)]
 pub struct Wall;
 impl Wall {
-    /// Initialize a new wall.
     fn new(location: WallLocation) -> (Wall, Sprite, Transform) {
         (
             Wall,
@@ -32,7 +28,6 @@ impl Wall {
     }
 }
 
-/// Represents a wall location.
 enum WallLocation {
     Left,
     Right,
@@ -41,7 +36,6 @@ enum WallLocation {
 }
 
 impl WallLocation {
-    /// Returns the wall location's world position.
     fn position(&self) -> Vec2 {
         match self {
             WallLocation::Left => Vec2::new(WALL_POSITION_LEFT, 0.0),
@@ -51,7 +45,6 @@ impl WallLocation {
         }
     }
 
-    /// Returns the wall location's world size.
     fn size(&self) -> Vec2 {
         let arena_width = WALL_POSITION_RIGHT - WALL_POSITION_LEFT;
         let arena_height = WALL_POSITION_TOP - WALL_POSITION_BOTTOM;
@@ -68,7 +61,6 @@ impl WallLocation {
 }
 
 impl WallPlugin {
-    /// Spawns walls.
     fn setup_walls(mut commands: Commands) {
         commands.spawn(Wall::new(WallLocation::Left));
         commands.spawn(Wall::new(WallLocation::Right));

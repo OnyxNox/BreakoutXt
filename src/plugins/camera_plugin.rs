@@ -1,6 +1,5 @@
 use bevy::prelude::*;
 
-/// Collection of resources and systems around the main camera.
 pub struct CameraPlugin;
 impl Plugin for CameraPlugin {
     fn build(&self, app: &mut App) {
@@ -9,7 +8,6 @@ impl Plugin for CameraPlugin {
 }
 
 impl CameraPlugin {
-    /// Spawns the main camera.
     fn setup_camera(mut commands: Commands) {
         commands.spawn(Camera2d);
     }

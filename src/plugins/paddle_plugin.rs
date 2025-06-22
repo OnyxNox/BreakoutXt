@@ -8,19 +8,14 @@ use crate::{
     },
 };
 
-/// Paddle color.
 const PADDLE_COLOR: Color = Color::srgb(0.3, 0.3, 0.7);
 
-/// Paddle padding from the left and right walls.
 const PADDLE_X_PADDING: f32 = 10.0;
 
-/// Paddle's rate of speed.
 const PADDLE_SPEED: f32 = 500.0;
 
-/// Paddle size.
 const PADDLE_SIZE: Vec2 = Vec2::new(120.0, 20.0);
 
-/// Collection of resources and systems around the paddle.
 pub struct PaddlePlugin;
 impl Plugin for PaddlePlugin {
     fn build(&self, app: &mut App) {
@@ -30,7 +25,6 @@ impl Plugin for PaddlePlugin {
 }
 
 impl PaddlePlugin {
-    /// Spawns paddle.
     fn setup_paddle(mut commands: Commands) {
         commands.spawn((
             Collider,
@@ -44,7 +38,6 @@ impl PaddlePlugin {
         ));
     }
 
-    /// Updates the paddle's position.
     fn update_paddle(
         keyboard_input: Res<ButtonInput<KeyCode>>,
         time: Res<Time>,

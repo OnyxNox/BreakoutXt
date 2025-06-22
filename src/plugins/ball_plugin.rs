@@ -2,7 +2,6 @@ use bevy::prelude::*;
 
 use crate::{components::*, constants::*};
 
-/// Collection of resources and systems around the ball.
 pub struct BallPlugin;
 impl Plugin for BallPlugin {
     fn build(&self, app: &mut App) {
@@ -11,7 +10,6 @@ impl Plugin for BallPlugin {
 }
 
 impl BallPlugin {
-    /// Spawns ball.
     fn setup_ball(
         mut commands: Commands,
         mut materials: ResMut<Assets<ColorMaterial>>,

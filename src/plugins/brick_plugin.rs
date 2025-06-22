@@ -2,7 +2,6 @@ use bevy::prelude::*;
 
 use crate::{components::*, constants::*};
 
-/// Collection of resources and systems around the brick field.
 pub struct BrickPlugin;
 impl Plugin for BrickPlugin {
     fn build(&self, app: &mut App) {
@@ -11,7 +10,6 @@ impl Plugin for BrickPlugin {
 }
 
 impl BrickPlugin {
-    /// Spawns the brick field.
     fn setup_bricks(mut commands: Commands) {
         let paddle_y = WALL_POSITION_BOTTOM + PADDLE_Y_PADDING;
         let total_width_of_bricks =
