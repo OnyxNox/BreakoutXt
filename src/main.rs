@@ -11,8 +11,10 @@ use bevy::prelude::*;
 
 use crate::{plugins::GamePlugins, states::GameState};
 
-const CLEAR_COLOR: Color = Color::srgb(0.13, 0.13, 0.13);
+/// Color used to clear the screen between frames.
+const WINDOW_CLEAR_COLOR: Color = Color::srgb(0.13, 0.13, 0.13);
 
+/// Application entry point.
 fn main() {
     App::new()
         .add_plugins((
@@ -25,7 +27,7 @@ fn main() {
             }),
             GamePlugins,
         ))
-        .insert_resource(ClearColor(CLEAR_COLOR))
+        .insert_resource(ClearColor(WINDOW_CLEAR_COLOR))
         .init_state::<GameState>()
         .run();
 }

@@ -1,12 +1,12 @@
 use bevy::prelude::*;
 
-use crate::{components::*, constants::*, states::*, utility::despawn_screen};
+use crate::{components::*, constants::*, states::*, utility::despawn};
 
 pub struct BrickPlugin;
 impl Plugin for BrickPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(OnEnter(GameState::Game), Self::setup_bricks)
-            .add_systems(OnExit(GameState::Game), despawn_screen::<Brick>);
+            .add_systems(OnExit(GameState::Game), despawn::<Brick>);
     }
 }
 
@@ -43,8 +43,8 @@ impl BrickPlugin {
                         ..default()
                     },
                     Transform {
-                        translation: brick_position.extend(0.0),
                         scale: Vec3::new(BRICK_SIZE.x, BRICK_SIZE.y, 1.0),
+                        translation: brick_position.extend(0.0),
                         ..default()
                     },
                 ));

@@ -1,7 +1,6 @@
 {
     "extensions": {
         "recommendations": [
-            "ethansk.restore-terminals",
             "fill-labs.dependi",
             "ms-vscode.cpptools",
             "rust-lang.rust-analyzer",
@@ -18,6 +17,10 @@
         "configurations": [],
     },
     "settings": {
+        "cSpell.words": [
+            "despawn",
+            "despawns"
+        ],
         "debug.allowBreakpointsEverywhere": true,
         "editor.formatOnSave": true,
         "editor.rulers": [

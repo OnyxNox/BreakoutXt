@@ -1,14 +1,7 @@
 use bevy::prelude::*;
 
-pub const BALL_COLOR: Color = Color::srgb(1.0, 0.5, 0.5);
-
+/// Diameter of the ball.
 pub const BALL_DIAMETER: f32 = 30.0;
-
-pub const BALL_INITIAL_VELOCITY: Vec2 = Vec2::new(0.5, -0.5);
-
-pub const BALL_SPEED: f32 = 400.0;
-
-pub const BALL_STARTING_POSITION: Vec3 = Vec3::new(0.0, -50.0, 1.0);
 
 pub const BRICK_COLOR: Color = Color::srgb(0.5, 0.5, 1.0);
 

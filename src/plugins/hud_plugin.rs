@@ -1,28 +1,35 @@
 use bevy::prelude::*;
 
-use crate::{resources::*, states::*, utility::despawn_screen};
+use crate::{resources::*, states::*, utility::despawn};
 
-const FONT_SIZE: f32 = 33.0;
+/// Font size of the Heads-Up Display (HUD).
+const HUD_FONT_SIZE: f32 = 33.0;
 
-const SCORE_TEXT_COLOR: Color = Color::srgb(1.0, 0.5, 0.5);
+/// Color of the Heads-Up Display (HUD) score text.
+const HUD_SCORE_TEXT_COLOR: Color = Color::srgb(1.0, 0.5, 0.5);
 
-const TEXT_COLOR: Color = Color::srgb(0.5, 0.5, 1.0);
+/// Color of the Heads-Up Display (HUD) text.
+const HUD_TEXT_COLOR: Color = Color::srgb(0.5, 0.5, 1.0);
 
-const TEXT_PADDING: Val = Val::Px(9.0);
+/// Padding of the Heads-Up Display (HUD).
+const HUD_TEXT_PADDING: Val = Val::Px(9.0);
 
+/// Collection of Heads-Up Display (HUD) logic and configuration.
 pub struct HudPlugin;
 impl Plugin for HudPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(OnEnter(GameState::Game), Self::setup_hud)
             .add_systems(Update, Self::update_hud.run_if(in_state(GameState::Game)))
-            .add_systems(OnExit(GameState::Game), despawn_screen::<HeadsUpDisplay>);
+            .add_systems(OnExit(GameState::Game), despawn::<HeadsUpDisplay>);
     }
 }
 
+/// Heads-Up Display (HUD) marker component.
 #[derive(Component)]
 pub struct HeadsUpDisplay;
 
 impl HudPlugin {
+    /// Initializes the Heads-Up Display (HUD).
     fn setup_hud(mut commands: Commands) {
         commands.insert_resource(Score(0));
 
@@ -30,20 +37,20 @@ impl HudPlugin {
             HeadsUpDisplay,
             Node {
                 position_type: PositionType::Absolute,
-                top: TEXT_PADDING,
-                left: TEXT_PADDING,
+                top: HUD_TEXT_PADDING,
+                left: HUD_TEXT_PADDING,
                 ..Default::default()
             },
             Text::new("Score: "),
-            TextColor(TEXT_COLOR),
+            TextColor(HUD_TEXT_COLOR),
             TextFont {
-                font_size: FONT_SIZE,
+                font_size: HUD_FONT_SIZE,
                 ..Default::default()
             },
             children![(
-                TextColor(SCORE_TEXT_COLOR),
+                TextColor(HUD_SCORE_TEXT_COLOR),
                 TextFont {
-                    font_size: FONT_SIZE,
+                    font_size: HUD_FONT_SIZE,
                     ..Default::default()
                 },
                 TextSpan::default(),
@@ -51,11 +58,12 @@ impl HudPlugin {
         ));
     }
 
+    /// Updates the Heads-Up Display (HUD) to display the current score.
     fn update_hud(
         score: Res<Score>,
-        score_root: Single<Entity, (With<HeadsUpDisplay>, With<Text>)>,
+        score_entity: Single<Entity, (With<HeadsUpDisplay>, With<Text>)>,
         mut text_writer: TextUiWriter,
     ) {
-        *text_writer.text(*score_root, 1) = score.to_string();
+        *text_writer.text(*score_entity, 1) = score.to_string();
     }
 }

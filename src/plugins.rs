@@ -7,7 +7,7 @@ mod hud_plugin;
 mod main_menu_plugin;
 mod paddle_plugin;
 mod physics_plugin;
-mod splash_plugin;
+mod splash_screen_plugin;
 mod wall_plugin;
 
 use bevy::{app::PluginGroupBuilder, prelude::*};
@@ -25,7 +25,7 @@ impl PluginGroup for GamePlugins {
             .add(self::main_menu_plugin::MainMenuPlugin)
             .add(self::paddle_plugin::PaddlePlugin)
             .add(self::physics_plugin::PhysicsPlugin)
-            .add(self::splash_plugin::SplashPlugin)
+            .add(self::splash_screen_plugin::SplashScreenPlugin)
             .add(self::wall_plugin::WallPlugin)
     }
 }

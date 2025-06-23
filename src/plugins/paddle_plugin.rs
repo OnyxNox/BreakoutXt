@@ -1,15 +1,20 @@
 use bevy::prelude::*;
 
-use crate::{components::*, constants::*, states::*, utility::despawn_screen};
+use crate::{components::*, constants::*, states::*, utility::despawn};
 
+/// Color of the paddle.
 const PADDLE_COLOR: Color = Color::srgb(0.3, 0.3, 0.7);
 
-const PADDLE_X_PADDING: f32 = 10.0;
-
-const PADDLE_SPEED: f32 = 500.0;
-
+/// Size of the paddle.
 const PADDLE_SIZE: Vec2 = Vec2::new(120.0, 20.0);
 
+/// Speed of the paddle.
+const PADDLE_SPEED: f32 = 500.0;
+
+/// Horizontal padding between the paddle and walls.
+const PADDLE_X_PADDING: f32 = 10.0;
+
+/// Collection of paddle logic and configuration.
 pub struct PaddlePlugin;
 impl Plugin for PaddlePlugin {
     fn build(&self, app: &mut App) {
@@ -18,11 +23,16 @@ impl Plugin for PaddlePlugin {
                 FixedUpdate,
                 Self::update_paddle.run_if(in_state(GameState::Game)),
             )
-            .add_systems(OnExit(GameState::Game), despawn_screen::<Paddle>);
+            .add_systems(OnExit(GameState::Game), despawn::<Paddle>);
     }
 }
 
+/// Paddle marker component.
+#[derive(Component)]
+struct Paddle;
+
 impl PaddlePlugin {
+    /// Initializes the paddle.
     fn setup_paddle(mut commands: Commands) {
         commands.spawn((
             Collider,
@@ -36,6 +46,7 @@ impl PaddlePlugin {
         ));
     }
 
+    /// Updates the paddle position in response to user inputs.
     fn update_paddle(
         keyboard_input: Res<ButtonInput<KeyCode>>,
         time: Res<Time>,

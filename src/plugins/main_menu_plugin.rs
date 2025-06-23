@@ -1,6 +1,6 @@
 use bevy::{color::palettes::css::CRIMSON, ecs::spawn::SpawnWith, prelude::*};
 
-use crate::{components::*, constants::*, resources::Volume, states::*, utility::despawn_screen};
+use crate::{components::*, constants::*, resources::Volume, states::*, utility::despawn};
 
 pub struct MainMenuPlugin;
 impl Plugin for MainMenuPlugin {
@@ -23,9 +23,9 @@ impl Plugin for MainMenuPlugin {
             )
             .add_systems(
                 OnExit(MainMenuState::Settings),
-                despawn_screen::<SettingsMenu>,
+                despawn::<SettingsMenu>,
             )
-            .add_systems(OnExit(MainMenuState::MainMenu), despawn_screen::<MainMenu>);
+            .add_systems(OnExit(MainMenuState::MainMenu), despawn::<MainMenu>);
     }
 }
 
