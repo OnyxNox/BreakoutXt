@@ -48,7 +48,7 @@ impl SplashPlugin {
         mut timer: ResMut<SplashTimer>,
     ) {
         if timer.tick(time.delta()).finished() {
-            game_state.set(GameState::Game);
+            game_state.set(GameState::MainMenu);
         }
     }
 }

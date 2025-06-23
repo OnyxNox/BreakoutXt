@@ -20,6 +20,14 @@ pub const BRICK_PADDING: f32 = 5.0;
 
 pub const BRICK_SIZE: Vec2 = Vec2::new(100.0, 30.0);
 
+pub const MENU_HOVERED_BUTTON: Color = Color::srgb(0.25, 0.25, 0.25);
+
+pub const MENU_HOVERED_PRESSED_BUTTON: Color = Color::srgb(0.25, 0.65, 0.25);
+
+pub const MENU_NORMAL_BUTTON: Color = Color::srgb(0.15, 0.15, 0.15);
+
+pub const MENU_PRESSED_BUTTON: Color = Color::srgb(0.35, 0.75, 0.35);
+
 pub const PADDLE_Y_PADDING: f32 = 60.0;
 
 pub const WALL_POSITION_BOTTOM: f32 = -300.0;

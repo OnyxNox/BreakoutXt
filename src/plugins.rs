@@ -3,6 +3,7 @@ mod ball_plugin;
 mod brick_plugin;
 mod camera_plugin;
 mod hud_plugin;
+mod main_menu_plugin;
 mod paddle_plugin;
 mod physics_plugin;
 mod splash_plugin;
@@ -19,6 +20,7 @@ impl PluginGroup for GamePlugins {
             .add(self::brick_plugin::BrickPlugin)
             .add(self::camera_plugin::CameraPlugin)
             .add(self::hud_plugin::HudPlugin)
+            .add(self::main_menu_plugin::MainMenuPlugin)
             .add(self::paddle_plugin::PaddlePlugin)
             .add(self::physics_plugin::PhysicsPlugin)
             .add(self::splash_plugin::SplashPlugin)
