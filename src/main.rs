@@ -15,7 +15,16 @@ const CLEAR_COLOR: Color = Color::srgb(0.13, 0.13, 0.13);
 
 fn main() {
     App::new()
-        .add_plugins((DefaultPlugins, GamePlugins))
+        .add_plugins((
+            DefaultPlugins.set(WindowPlugin {
+                primary_window: Some(Window {
+                    title: "Breakout XT".into(),
+                    ..Default::default()
+                }),
+                ..Default::default()
+            }),
+            GamePlugins,
+        ))
         .insert_resource(ClearColor(CLEAR_COLOR))
         .init_state::<GameState>()
         .run();
