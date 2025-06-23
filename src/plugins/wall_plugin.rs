@@ -1,13 +1,14 @@
 use bevy::prelude::*;
 
-use crate::{components::*, constants::*, states::*};
+use crate::{components::*, constants::*, states::*, utility::despawn_screen};
 
 const WALL_COLOR: Color = Color::srgb(0.8, 0.8, 0.8);
 
 pub struct WallPlugin;
 impl Plugin for WallPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(GameState::Game), Self::setup_walls);
+        app.add_systems(OnEnter(GameState::Game), Self::setup_walls)
+            .add_systems(OnExit(GameState::Game), despawn_screen::<Wall>);
     }
 }
 

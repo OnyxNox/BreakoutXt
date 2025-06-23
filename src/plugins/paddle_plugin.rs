@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{components::*, constants::*, states::*};
+use crate::{components::*, constants::*, states::*, utility::despawn_screen};
 
 const PADDLE_COLOR: Color = Color::srgb(0.3, 0.3, 0.7);
 
@@ -17,7 +17,8 @@ impl Plugin for PaddlePlugin {
             .add_systems(
                 FixedUpdate,
                 Self::update_paddle.run_if(in_state(GameState::Game)),
-            );
+            )
+            .add_systems(OnExit(GameState::Game), despawn_screen::<Paddle>);
     }
 }
 

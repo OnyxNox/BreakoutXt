@@ -2,6 +2,7 @@ mod audio_plugin;
 mod ball_plugin;
 mod brick_plugin;
 mod camera_plugin;
+mod game_plugin;
 mod hud_plugin;
 mod main_menu_plugin;
 mod paddle_plugin;
@@ -19,6 +20,7 @@ impl PluginGroup for GamePlugins {
             .add(self::ball_plugin::BallPlugin)
             .add(self::brick_plugin::BrickPlugin)
             .add(self::camera_plugin::CameraPlugin)
+            .add(self::game_plugin::GamePlugin)
             .add(self::hud_plugin::HudPlugin)
             .add(self::main_menu_plugin::MainMenuPlugin)
             .add(self::paddle_plugin::PaddlePlugin)

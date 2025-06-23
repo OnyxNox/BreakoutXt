@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{resources::*, states::*};
+use crate::{resources::*, states::*, utility::despawn_screen};
 
 const FONT_SIZE: f32 = 33.0;
 
@@ -13,9 +13,9 @@ const TEXT_PADDING: Val = Val::Px(9.0);
 pub struct HudPlugin;
 impl Plugin for HudPlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(Score(0))
-            .add_systems(OnEnter(GameState::Game), Self::setup_hud)
-            .add_systems(Update, Self::update_hud.run_if(in_state(GameState::Game)));
+        app.add_systems(OnEnter(GameState::Game), Self::setup_hud)
+            .add_systems(Update, Self::update_hud.run_if(in_state(GameState::Game)))
+            .add_systems(OnExit(GameState::Game), despawn_screen::<HeadsUpDisplay>);
     }
 }
 
@@ -24,6 +24,8 @@ pub struct HeadsUpDisplay;
 
 impl HudPlugin {
     fn setup_hud(mut commands: Commands) {
+        commands.insert_resource(Score(0));
+
         commands.spawn((
             HeadsUpDisplay,
             Node {
