@@ -11,6 +11,7 @@ pub enum GameState {
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq, States)]
 pub enum MainMenuState {
     MainMenu,
+    Settings,
     #[default]
     Disabled,
 }

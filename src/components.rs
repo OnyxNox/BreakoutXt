@@ -15,7 +15,9 @@ pub struct MainMenu;
 #[derive(Component)]
 pub enum MainMenuAction {
     Play,
+    Settings,
     Quit,
+    Back,
 }
 
 #[derive(Component)]
@@ -23,6 +25,9 @@ pub struct Paddle;
 
 #[derive(Component)]
 pub struct SelectedOption;
+
+#[derive(Component)]
+pub struct SettingsMenu;
 
 #[derive(Component, Deref, DerefMut)]
 pub struct Velocity(pub Vec2);
