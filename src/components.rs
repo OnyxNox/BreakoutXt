@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::traits::MenuAction;
+
 /// Ball marker component.
 #[derive(Component)]
 pub struct Ball;
@@ -12,16 +14,19 @@ pub struct Brick;
 #[derive(Component, Default)]
 pub struct Collider;
 
+/// Main menu marker component.
 #[derive(Component)]
 pub struct MainMenu;
 
 #[derive(Component)]
 pub enum MainMenuAction {
     Play,
-    Settings,
-    Quit,
+    Options,
+    Exit,
     Back,
 }
+
+impl MenuAction for MainMenuAction {}
 
 #[derive(Component)]
 pub struct SelectedOption;

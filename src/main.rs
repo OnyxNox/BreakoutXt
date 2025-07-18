@@ -1,3 +1,4 @@
+mod bundles;
 mod components;
 mod constants;
 mod enums;
@@ -5,6 +6,7 @@ mod events;
 mod plugins;
 mod resources;
 mod states;
+mod traits;
 mod utility;
 
 use bevy::prelude::*;

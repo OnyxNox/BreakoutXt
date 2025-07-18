@@ -13,4 +13,4 @@ Execute `cargo run` from the repository's root directory in a terminal. User rel
 ## Asset Credits
 
 - [Bevy](https://bevy.org/) - [Assets 0.16.1](https://github.com/bevyengine/bevy/tree/release-0.16.1/assets)
-- [Kenny](https://kenney.nl/) - [Game Icons 1.0](https://kenney.nl/assets/game-icons), [Impact Sounds 1.0](https://kenney.nl/assets/impact-sounds)
+- [Kenny](https://kenney.nl/) - [Game Icons 1.0](https://kenney.nl/assets/game-icons), [Impact Sounds 1.0](https://kenney.nl/assets/impact-sounds), [UI Pack 2.0](https://kenney.nl/assets/ui-pack)

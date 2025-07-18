@@ -1,6 +1,13 @@
 use bevy::{color::palettes::css::CRIMSON, ecs::spawn::SpawnWith, prelude::*};
 
-use crate::{components::*, constants::*, resources::Volume, states::*, utility::despawn};
+use crate::{
+    bundles::UiButton,
+    components::*,
+    constants::*,
+    resources::{UserInterface, Volume},
+    states::*,
+    utility::despawn,
+};
 
 pub struct MainMenuPlugin;
 impl Plugin for MainMenuPlugin {
@@ -19,49 +26,26 @@ impl Plugin for MainMenuPlugin {
             )
             .add_systems(
                 Update,
-                (Self::button_system, Self::menu_action).run_if(in_state(GameState::MainMenu)),
+                Self::menu_action.run_if(in_state(GameState::MainMenu)),
             )
-            .add_systems(
-                OnExit(MainMenuState::Settings),
-                despawn::<SettingsMenu>,
-            )
+            .add_systems(OnExit(MainMenuState::Settings), despawn::<SettingsMenu>)
             .add_systems(OnExit(MainMenuState::MainMenu), despawn::<MainMenu>);
     }
 }
 
-const TEXT_COLOR: Color = Color::srgb(0.9, 0.9, 0.9);
-
 impl MainMenuPlugin {
-    fn button_system(
-        mut interaction_query: Query<
-            (&Interaction, &mut BackgroundColor, Option<&SelectedOption>),
-            (Changed<Interaction>, With<Button>),
-        >,
-    ) {
-        for (interaction, mut background_color, selected) in &mut interaction_query {
-            *background_color = match (*interaction, selected) {
-                (Interaction::Pressed, _) | (Interaction::None, Some(_)) => {
-                    MENU_PRESSED_BUTTON.into()
-                }
-                (Interaction::Hovered, Some(_)) => MENU_HOVERED_PRESSED_BUTTON.into(),
-                (Interaction::Hovered, None) => MENU_HOVERED_BUTTON.into(),
-                (Interaction::None, None) => MENU_NORMAL_BUTTON.into(),
-            }
-        }
-    }
-
     fn enable_main_menu(mut menu_state: ResMut<NextState<MainMenuState>>) {
         menu_state.set(MainMenuState::MainMenu);
     }
 
     fn menu_action(
+        mut game_state: ResMut<NextState<GameState>>,
+        mut menu_state: ResMut<NextState<MainMenuState>>,
         interaction_query: Query<
             (&Interaction, &MainMenuAction),
             (Changed<Interaction>, With<Button>),
         >,
         mut app_exit_events: EventWriter<AppExit>,
-        mut menu_state: ResMut<NextState<MainMenuState>>,
-        mut game_state: ResMut<NextState<GameState>>,
     ) {
         for (interaction, menu_button_action) in &interaction_query {
             if *interaction == Interaction::Pressed {
@@ -70,10 +54,10 @@ impl MainMenuPlugin {
                         game_state.set(GameState::Game);
                         menu_state.set(MainMenuState::Disabled);
                     }
-                    MainMenuAction::Settings => {
+                    MainMenuAction::Options => {
                         menu_state.set(MainMenuState::Settings);
                     }
-                    MainMenuAction::Quit => {
+                    MainMenuAction::Exit => {
                         app_exit_events.write(AppExit::Success);
                     }
                     MainMenuAction::Back => {
@@ -84,31 +68,27 @@ impl MainMenuPlugin {
         }
     }
 
-    fn setup_main_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
-        let button_node = Node {
-            align_items: AlignItems::Center,
-            height: Val::Px(65.0),
-            justify_content: JustifyContent::Center,
-            margin: UiRect::all(Val::Px(20.0)),
-            width: Val::Px(300.0),
-            ..default()
-        };
-
-        let button_icon_node = Node {
-            left: Val::Px(10.0),
-            position_type: PositionType::Absolute,
-            width: Val::Px(30.0),
-            ..default()
-        };
-
+    fn setup_main_menu(
+        mut commands: Commands,
+        asset_server: Res<AssetServer>,
+        ui: Res<UserInterface>,
+    ) {
         let button_text_font = TextFont {
-            font_size: 33.0,
+            font: ui.fonts.narrow.clone(),
+            font_size: 24.0,
             ..default()
         };
 
-        let exit_icon = asset_server.load("Kenney/game_icons/exitLeft.png");
+        let exit_icon = asset_server.load("Kenney/game_icons/exit_left.png");
         let play_icon = asset_server.load("Kenney/game_icons/forward.png");
-        let settings_icon = asset_server.load("Kenney/game_icons/gear.png");
+        let options_icon = asset_server.load("Kenney/game_icons/gear.png");
+
+        let border_slicer = TextureSlicer {
+            border: BorderRect::all(16.0),
+            center_scale_mode: SliceScaleMode::Stretch,
+            sides_scale_mode: SliceScaleMode::Stretch,
+            max_corner_scale: 0.5,
+        };
 
         commands.spawn((
             Node {
@@ -125,64 +105,79 @@ impl MainMenuPlugin {
                     flex_direction: FlexDirection::Column,
                     ..default()
                 },
-                BackgroundColor(CRIMSON.into()),
                 children![
                     (
-                        Text::new("Breakout XT"),
-                        TextFont {
-                            font_size: 67.0,
-                            ..default()
+                        ImageNode {
+                            image: ui.borders.red_flat.clone(),
+                            image_mode: NodeImageMode::Sliced(border_slicer.clone()),
+                            ..Default::default()
                         },
-                        TextColor(TEXT_COLOR),
+                        children![(
+                            Node {
+                                align_items: AlignItems::Center,
+                                flex_direction: FlexDirection::Column,
+                                margin: UiRect::px(0.0, 0.0, 6.0, 10.0),
+                                width: Val::Px(486.0),
+                                ..default()
+                            },
+                            children![(
+                                Text::new("Breakout XT"),
+                                TextColor(TEXT_COLOR),
+                                TextFont {
+                                    font: ui.fonts.normal.clone(),
+                                    font_size: 28.0,
+                                    ..default()
+                                },
+                            )],
+                        )],
+                    ),
+                    (
+                        ImageNode {
+                            image: ui.borders.red_border.clone(),
+                            image_mode: NodeImageMode::Sliced(border_slicer.clone()),
+                            ..Default::default()
+                        },
                         Node {
-                            margin: UiRect::all(Val::Px(50.0)),
+                            align_items: AlignItems::Center,
+                            flex_direction: FlexDirection::Column,
+                            margin: UiRect::top(Val::Px(-9.0)),
+                            width: Val::Px(486.0),
                             ..default()
                         },
-                    ),
-                    (
-                        Button,
-                        button_node.clone(),
-                        BackgroundColor(MENU_NORMAL_BUTTON),
-                        MainMenuAction::Play,
                         children![
-                            (ImageNode::new(play_icon), button_icon_node.clone()),
-                            (
-                                Text::new("New Game"),
+                            UiButton::new(
+                                Some("Play"),
+                                Some(play_icon),
                                 button_text_font.clone(),
-                                TextColor(TEXT_COLOR),
+                                ui.borders.red_gloss.clone(),
+                                MainMenuAction::Play
+                            ),
+                            UiButton::new(
+                                Some("Options"),
+                                Some(options_icon),
+                                button_text_font.clone(),
+                                ui.borders.red_gloss.clone(),
+                                MainMenuAction::Options
+                            ),
+                            UiButton::new(
+                                Some("Exit"),
+                                Some(exit_icon),
+                                button_text_font.clone(),
+                                ui.borders.red_gloss.clone(),
+                                MainMenuAction::Exit
                             ),
                         ]
-                    ),
-                    (
-                        Button,
-                        button_node.clone(),
-                        BackgroundColor(MENU_NORMAL_BUTTON),
-                        MainMenuAction::Settings,
-                        children![
-                            (ImageNode::new(settings_icon), button_icon_node.clone()),
-                            (
-                                Text::new("Settings"),
-                                button_text_font.clone(),
-                                TextColor(TEXT_COLOR),
-                            ),
-                        ]
-                    ),
-                    (
-                        Button,
-                        button_node,
-                        BackgroundColor(MENU_NORMAL_BUTTON),
-                        MainMenuAction::Quit,
-                        children![
-                            (ImageNode::new(exit_icon), button_icon_node),
-                            (Text::new("Quit"), button_text_font, TextColor(TEXT_COLOR)),
-                        ]
-                    ),
-                ]
+                    )
+                ],
             )],
         ));
     }
 
-    fn sound_settings_menu_setup(mut commands: Commands, volume: Res<Volume>) {
+    fn sound_settings_menu_setup(
+        mut commands: Commands,
+        volume: Res<Volume>,
+        ui: Res<UserInterface>,
+    ) {
         let button_node = Node {
             align_items: AlignItems::Center,
             height: Val::Px(65.0),
@@ -201,6 +196,9 @@ impl MainMenuPlugin {
 
         let volume = *volume;
         let button_node_clone = button_node.clone();
+        let button_image = ui.borders.red_gloss.clone();
+        let back_button_image = ui.borders.red_flat.clone();
+
         commands.spawn((
             Node {
                 width: Val::Percent(100.0),
@@ -235,7 +233,17 @@ impl MainMenuPlugin {
                                             height: Val::Px(65.0),
                                             ..button_node_clone.clone()
                                         },
-                                        BackgroundColor(MENU_NORMAL_BUTTON),
+                                        ImageNode {
+                                            image: button_image.clone(),
+                                            image_mode: NodeImageMode::Sliced(TextureSlicer {
+                                                border: BorderRect::all(16.0),
+                                                center_scale_mode: SliceScaleMode::Stretch,
+                                                sides_scale_mode: SliceScaleMode::Stretch,
+                                                max_corner_scale: 0.5,
+                                            }),
+                                            color: MENU_NORMAL_BUTTON,
+                                            ..Default::default()
+                                        },
                                         Volume(volume_setting),
                                     ));
 
@@ -249,7 +257,17 @@ impl MainMenuPlugin {
                     (
                         Button,
                         button_node,
-                        BackgroundColor(MENU_NORMAL_BUTTON),
+                        ImageNode {
+                            image: back_button_image,
+                            image_mode: NodeImageMode::Sliced(TextureSlicer {
+                                border: BorderRect::all(16.0),
+                                center_scale_mode: SliceScaleMode::Stretch,
+                                sides_scale_mode: SliceScaleMode::Stretch,
+                                max_corner_scale: 0.5,
+                            }),
+                            color: MENU_NORMAL_BUTTON,
+                            ..Default::default()
+                        },
                         MainMenuAction::Back,
                         children![(Text::new("Back"), button_text_style)]
                     )
@@ -260,15 +278,15 @@ impl MainMenuPlugin {
 
     fn setting_button<T: Resource + Component + PartialEq + Copy>(
         interaction_query: Query<(&Interaction, &T, Entity), (Changed<Interaction>, With<Button>)>,
-        selected_query: Single<(Entity, &mut BackgroundColor), With<SelectedOption>>,
+        selected_query: Single<(Entity, &mut ImageNode), With<SelectedOption>>,
         mut commands: Commands,
         mut setting: ResMut<T>,
     ) {
-        let (previous_button, mut previous_button_color) = selected_query.into_inner();
+        let (previous_button, mut previous_button_image) = selected_query.into_inner();
 
         for (interaction, button_setting, entity) in &interaction_query {
             if *interaction == Interaction::Pressed && *setting != *button_setting {
-                *previous_button_color = MENU_NORMAL_BUTTON.into();
+                previous_button_image.color = MENU_NORMAL_BUTTON;
                 commands.entity(previous_button).remove::<SelectedOption>();
                 commands.entity(entity).insert(SelectedOption);
                 *setting = *button_setting;

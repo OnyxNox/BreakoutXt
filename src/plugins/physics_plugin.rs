@@ -57,7 +57,7 @@ impl PhysicsPlugin {
         let (mut ball_velocity, ball_transform) = ball_query.into_inner();
 
         for (collider_entity, collider_transform, maybe_brick) in &collider_query {
-            let collision = Self::ball_collision(
+            let collision: Option<Collision> = Self::ball_collision(
                 BoundingCircle::new(ball_transform.translation.truncate(), BALL_DIAMETER / 2.0),
                 Aabb2d::new(
                     collider_transform.translation.truncate(),
