@@ -19,7 +19,7 @@ impl ButtonPlugin {
         for (interaction, mut image_node, selected) in &mut interaction_query {
             let color = match (*interaction, selected) {
                 (Interaction::Pressed, _) | (Interaction::None, Some(_)) => MENU_PRESSED_BUTTON,
-                (Interaction::Hovered, Some(_)) => MENU_HOVERED_PRESSED_BUTTON,
+                (Interaction::Hovered, Some(_)) => MENU_PRESSED_BUTTON,
                 (Interaction::Hovered, None) => MENU_HOVERED_BUTTON,
                 (Interaction::None, None) => MENU_NORMAL_BUTTON,
             };

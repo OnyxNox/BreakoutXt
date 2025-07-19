@@ -36,3 +36,6 @@ pub struct SettingsMenu;
 
 #[derive(Component, Deref, DerefMut)]
 pub struct Velocity(pub Vec2);
+
+#[derive(Component)]
+pub struct ButtonPressed;

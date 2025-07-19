@@ -41,27 +41,46 @@ impl MainMenuPlugin {
     fn menu_action(
         mut game_state: ResMut<NextState<GameState>>,
         mut menu_state: ResMut<NextState<MainMenuState>>,
-        interaction_query: Query<
-            (&Interaction, &MainMenuAction),
+        mut interaction_query: Query<
+            (
+                &Interaction,
+                &MainMenuAction,
+                Entity,
+                Option<&ButtonPressed>,
+            ),
             (Changed<Interaction>, With<Button>),
         >,
+        mut commands: Commands,
         mut app_exit_events: EventWriter<AppExit>,
     ) {
-        for (interaction, menu_button_action) in &interaction_query {
-            if *interaction == Interaction::Pressed {
-                match menu_button_action {
-                    MainMenuAction::Play => {
-                        game_state.set(GameState::Game);
-                        menu_state.set(MainMenuState::Disabled);
+        for (interaction, menu_button_action, entity, button_pressed) in &mut interaction_query {
+            match *interaction {
+                Interaction::Pressed => {
+                    commands.entity(entity).insert(ButtonPressed);
+                }
+                Interaction::Hovered => {
+                    if button_pressed.is_some() {
+                        commands.entity(entity).remove::<ButtonPressed>();
+                        match menu_button_action {
+                            MainMenuAction::Play => {
+                                game_state.set(GameState::Game);
+                                menu_state.set(MainMenuState::Disabled);
+                            }
+                            MainMenuAction::Options => {
+                                menu_state.set(MainMenuState::Settings);
+                            }
+                            MainMenuAction::Exit => {
+                                app_exit_events.write(AppExit::Success);
+                            }
+                            MainMenuAction::Back => {
+                                menu_state.set(MainMenuState::MainMenu);
+                            }
+                        }
                     }
-                    MainMenuAction::Options => {
-                        menu_state.set(MainMenuState::Settings);
-                    }
-                    MainMenuAction::Exit => {
-                        app_exit_events.write(AppExit::Success);
-                    }
-                    MainMenuAction::Back => {
-                        menu_state.set(MainMenuState::MainMenu);
+                }
+                Interaction::None => {
+                    if button_pressed.is_some() {
+                        commands.entity(entity).remove::<ButtonPressed>();
                     }
                 }
             }
@@ -277,19 +296,35 @@ impl MainMenuPlugin {
     }
 
     fn setting_button<T: Resource + Component + PartialEq + Copy>(
-        interaction_query: Query<(&Interaction, &T, Entity), (Changed<Interaction>, With<Button>)>,
+        mut interaction_query: Query<
+            (&Interaction, &T, Entity, Option<&ButtonPressed>),
+            (Changed<Interaction>, With<Button>),
+        >,
         selected_query: Single<(Entity, &mut ImageNode), With<SelectedOption>>,
         mut commands: Commands,
         mut setting: ResMut<T>,
     ) {
         let (previous_button, mut previous_button_image) = selected_query.into_inner();
 
-        for (interaction, button_setting, entity) in &interaction_query {
-            if *interaction == Interaction::Pressed && *setting != *button_setting {
-                previous_button_image.color = MENU_NORMAL_BUTTON;
-                commands.entity(previous_button).remove::<SelectedOption>();
-                commands.entity(entity).insert(SelectedOption);
-                *setting = *button_setting;
+        for (interaction, button_setting, entity, button_pressed) in &mut interaction_query {
+            match *interaction {
+                Interaction::Pressed => {
+                    commands.entity(entity).insert(ButtonPressed);
+                }
+                Interaction::Hovered => {
+                    if button_pressed.is_some() && *setting != *button_setting {
+                        commands.entity(entity).remove::<ButtonPressed>();
+                        previous_button_image.color = MENU_NORMAL_BUTTON;
+                        commands.entity(previous_button).remove::<SelectedOption>();
+                        commands.entity(entity).insert(SelectedOption);
+                        *setting = *button_setting;
+                    }
+                }
+                Interaction::None => {
+                    if button_pressed.is_some() {
+                        commands.entity(entity).remove::<ButtonPressed>();
+                    }
+                }
             }
         }
     }
